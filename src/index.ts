@@ -101,4 +101,9 @@ class Tracks implements Resource {
 }
 
 
-export {Medialibrary as Service};
+const getPlugins = ():Array<any> => {
+    return [Medialibrary];
+}
+
+
+export { Medialibrary, getPlugins };
