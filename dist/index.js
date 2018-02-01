@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -38,6 +38,13 @@ var Medialibrary = /** @class */ (function (_super) {
               return img;
             }); */
     }
+    Object.defineProperty(Medialibrary.prototype, "name", {
+        get: function () {
+            return 'medialibrary';
+        },
+        enumerable: true,
+        configurable: true
+    });
     return Medialibrary;
 }(core_1.Service));
 exports.Service = Medialibrary;
@@ -46,7 +53,7 @@ var Tracks = /** @class */ (function () {
     function Tracks(service) {
         this.service = service;
         this._tracks = [];
-        var mocksPath = path.join(__dirname, "data", "mocks.json");
+        var mocksPath = path.join(__dirname, "..", "data", "mocks.json");
         var mocks = JSON.parse(fs.readFileSync(mocksPath).toString());
         for (var idx in mocks.tracks) {
             if (mocks.tracks.hasOwnProperty(idx)) {
@@ -107,5 +114,4 @@ var Tracks = /** @class */ (function () {
     ;
     return Tracks;
 }());
-exports.Tracks = Tracks;
 //# sourceMappingURL=index.js.map

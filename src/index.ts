@@ -30,6 +30,14 @@ class Medialibrary extends Service {
       return img;
     }); */
   }
+
+
+  get name() {
+    return 'medialibrary';
+  }
+
+
+
 }
 
 interface TracksElement extends Element {
@@ -45,7 +53,7 @@ class Tracks implements Resource {
   //private _logger = rsiLogger.getInstance().getLogger("media");
 
   constructor(private service:Service) {
-    let mocksPath = path.join(__dirname, "data", "mocks.json");
+    let mocksPath = path.join(__dirname, "..", "data", "mocks.json");
 
     let mocks = JSON.parse(fs.readFileSync(mocksPath).toString());
     for (var idx in mocks.tracks) {
@@ -100,4 +108,4 @@ class Tracks implements Resource {
 }
 
 
-export {Medialibrary as Service, Tracks};
+export {Medialibrary as Service};
