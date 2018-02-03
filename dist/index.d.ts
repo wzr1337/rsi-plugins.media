@@ -2,4 +2,5 @@ import { Service } from "@rsi/core";
 declare class Medialibrary extends Service {
     constructor();
 }
-export { Medialibrary as Service };
+declare const getPlugins: () => (new () => Service)[];
+export { Medialibrary, getPlugins };

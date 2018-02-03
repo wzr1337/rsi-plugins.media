@@ -35,7 +35,7 @@ var Medialibrary = /** @class */ (function (_super) {
     }
     return Medialibrary;
 }(core_2.Service));
-exports.Service = Medialibrary;
+exports.Medialibrary = Medialibrary;
 var Tracks = /** @class */ (function () {
     //private _logger = rsiLogger.getInstance().getLogger("media");
     function Tracks(service) {
@@ -102,4 +102,8 @@ var Tracks = /** @class */ (function () {
     ;
     return Tracks;
 }());
+var getPlugins = function () {
+    return [Medialibrary];
+};
+exports.getPlugins = getPlugins;
 //# sourceMappingURL=index.js.map
