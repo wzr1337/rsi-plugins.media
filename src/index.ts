@@ -9,6 +9,8 @@ import { trackObject } from "./schema";
 
 import { Cdn } from "@rsi/server";
 
+import { Media } from "./media"
+
 
 
 class Medialibrary extends Service {
@@ -104,9 +106,9 @@ class Tracks implements Resource {
 
 
 const getPlugins = (): Array<new () => Service> => {
-    return [Medialibrary];
+    return [Medialibrary, Media];
 }
 
 
-export { Medialibrary, getPlugins };
+export { Medialibrary, Media, Tracks, getPlugins };
 

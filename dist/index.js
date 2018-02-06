@@ -16,6 +16,8 @@ var fs = require("fs");
 var core_1 = require("@rsi/core");
 var core_2 = require("@rsi/core");
 var server_1 = require("@rsi/server");
+var media_1 = require("./media");
+exports.Media = media_1.Media;
 var Medialibrary = /** @class */ (function (_super) {
     __extends(Medialibrary, _super);
     function Medialibrary() {
@@ -102,8 +104,9 @@ var Tracks = /** @class */ (function () {
     ;
     return Tracks;
 }());
+exports.Tracks = Tracks;
 var getPlugins = function () {
-    return [Medialibrary];
+    return [Medialibrary, media_1.Media];
 };
 exports.getPlugins = getPlugins;
 //# sourceMappingURL=index.js.map
