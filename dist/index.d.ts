@@ -13,8 +13,8 @@ declare class Tracks implements Resource {
     readonly name: string;
     readonly elementSubscribable: Boolean;
     readonly change: BehaviorSubject<ResourceUpdate>;
-    getElement(elementId: string): ElementResponse;
-    getResource(offset?: string | number, limit?: string | number): CollectionResponse;
+    getElement(elementId: string): Promise<ElementResponse>;
+    getResource(offset?: string | number, limit?: string | number): Promise<CollectionResponse>;
 }
 declare const getPlugins: () => (new () => Service)[];
 export { Medialibrary, Media, Tracks, getPlugins };

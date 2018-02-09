@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/wzr1337/rsi-plugins.medialibrary#readme",
   "dependencies": {
-    "@rsi/core": "https://github.com/wzr1337/rsi.core",
+    "@rsi/core": "https://github.com/wzr1337/rsi.core#e1b021c172c7be41bc27093768075b9958473332",
+    "@rsi/server": "git+https://github.com/wzr1337/rsi.server.git#develop",
     "rxjs": "^5.5.6",
     "uuid": "^3.2.1"
   },

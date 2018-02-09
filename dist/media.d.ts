@@ -14,10 +14,10 @@ declare class Renderers implements Resource {
     readonly name: string;
     readonly elementSubscribable: Boolean;
     readonly change: BehaviorSubject<ResourceUpdate>;
-    getElement(elementId: string): ElementResponse;
-    getResource(offset?: string | number, limit?: string | number): CollectionResponse;
+    getElement(elementId: string): Promise<ElementResponse>;
+    getResource(offset?: string | number, limit?: string | number): Promise<CollectionResponse>;
     private _interval;
-    updateElement(elementId: string, difference: any): ElementResponse;
+    updateElement(elementId: string, difference: any): Promise<ElementResponse>;
 }
 declare class Collections implements Resource {
     private service;
@@ -32,10 +32,10 @@ declare class Collections implements Resource {
     readonly resourceSubscribable: Boolean;
     readonly change: BehaviorSubject<ResourceUpdate>;
     private _setItems(itemuris);
-    getElement(elementId: string): ElementResponse;
-    createElement(state: any): ElementResponse;
-    updateElement(elementId: string, difference: any): ElementResponse;
-    deleteElement(elementId: string): ElementResponse;
-    getResource(offset?: string | number, limit?: string | number): CollectionResponse;
+    getElement(elementId: string): Promise<ElementResponse>;
+    createElement(state: any): Promise<ElementResponse>;
+    updateElement(elementId: string, difference: any): Promise<ElementResponse>;
+    deleteElement(elementId: string): Promise<ElementResponse>;
+    getResource(offset?: string | number, limit?: string | number): Promise<CollectionResponse>;
 }
 export { Media, Renderers, Collections };

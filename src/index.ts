@@ -82,7 +82,7 @@ class Tracks implements Resource {
     return this._change;
   }
 
-  getElement(elementId:string):ElementResponse {
+  async getElement(elementId:string): Promise<ElementResponse> {
     // find the element requested by the client
     return {
       status: "ok",
@@ -92,7 +92,7 @@ class Tracks implements Resource {
     };
   };
 
-  getResource(offset?:string|number, limit?:string|number):CollectionResponse{
+  async getResource(offset?:string|number, limit?:string|number): Promise<CollectionResponse> {
     // retriev all element
     let resp:BehaviorSubject<TracksElement>[];
 

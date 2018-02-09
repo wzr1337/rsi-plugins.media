@@ -64,7 +64,7 @@ class Renderers implements Resource {
     return this._change;
   }
 
-  getElement(elementId: string): ElementResponse {
+  async getElement(elementId: string): Promise<ElementResponse> {
     // find the element requested by the client
     var data = this._renderers.find((element: BehaviorSubject<RendererElement>) => {
       if (element) return (<{ id: string }>element.getValue().data).id === elementId;
@@ -76,7 +76,7 @@ class Renderers implements Resource {
     } : undefined;
   };
 
-  getResource(offset?: string | number, limit?: string | number): CollectionResponse {
+  async getResource(offset?: string | number, limit?: string | number): Promise<CollectionResponse> {
     // retriev all element
     let resp: BehaviorSubject<RendererElement>[];
 
@@ -90,8 +90,9 @@ class Renderers implements Resource {
 
   private _interval: NodeJS.Timer; //@TODO has to become per-renderer
 
-  updateElement(elementId: string, difference: any): ElementResponse {
-    let element = (<BehaviorSubject<RendererElement>>this.getElement(elementId).data);
+  async updateElement(elementId: string, difference: any): Promise<ElementResponse> {
+    const elementResponse: ElementResponse = await this.getElement(elementId);
+    let element = (<BehaviorSubject<RendererElement>>elementResponse.data);
     var renderer: RendererObject = element.getValue().data;
     let propertiesChanged: string[] = [];
 
@@ -200,7 +201,7 @@ class Collections implements Resource {
     return this._change;
   }
 
-  private _setItems(itemuris: string[]): ItemObject[] | ElementResponse {
+  private async _setItems(itemuris: string[]): Promise<ItemObject[] | ElementResponse> {
     let _items: ItemObject[] = [];
     let regex = /[\w\/\:]*([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fAF]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$/
     let errors: string[] = [];
@@ -213,7 +214,7 @@ class Collections implements Resource {
           if (!id) {
             errors.push("Id " + id + "not valid from uri: " + uri);
           } else {
-            let track = this._tracks.getElement(id);
+            let track = await this._tracks.getElement(id);
             if (track && track.data) {
               _items.push(track.data.getValue().data);
             }
@@ -232,7 +233,7 @@ class Collections implements Resource {
     return _items;
   }
 
-  getElement(elementId: string): ElementResponse {
+  async getElement(elementId: string): Promise<ElementResponse> {
     // find the element requested by the client
     return {
       status: "ok",
@@ -242,7 +243,7 @@ class Collections implements Resource {
     };
   };
 
-  createElement(state: any): ElementResponse {
+  async createElement(state: any): Promise<ElementResponse> {
     if (!state.name) return {
       status: "error",
       error: new Error('providing a name is mandatory'),
@@ -253,7 +254,7 @@ class Collections implements Resource {
 
     /** add items given with the query */
     if (state.hasOwnProperty('items')) {
-      items = this._setItems(state.items);
+      items = await this._setItems(state.items);
       if (!Array.isArray(items)) return items;
     }
 
@@ -278,13 +279,14 @@ class Collections implements Resource {
     return { status: "ok", data: newCollection };
   };
 
-  updateElement(elementId: string, difference: any): ElementResponse {
-    let element = this.getElement(elementId).data;
+  async updateElement(elementId: string, difference: any): Promise<ElementResponse> {
+    const elementResponse: ElementResponse = await this.getElement(elementId);
+    let element = await elementResponse.data;
     var collection: CollectionElement = element.getValue();
     let propertiesChanged: string[] = [];
 
     if (difference.hasOwnProperty('items')) {
-      let newItems = this._setItems(difference.items);
+      let newItems = await this._setItems(difference.items);
       if (!Array.isArray(newItems)) return newItems;
       collection.data.items = newItems;
       collection.lastUpdate = Date.now();
@@ -295,7 +297,7 @@ class Collections implements Resource {
     return { status: "error", code: 400, message: "No actions to take.." };
   }
 
-  deleteElement(elementId: string): ElementResponse {
+  async deleteElement(elementId: string): Promise<ElementResponse> {
     let idx = this._collections.findIndex((element: BehaviorSubject<CollectionElement>, index: number) => {
       return (<{ id: string }>element.getValue().data).id === elementId;
     });
@@ -306,7 +308,7 @@ class Collections implements Resource {
     return { status: "error", code: 404, message: "Element can not be found" };
   }
 
-  getResource(offset?: string | number, limit?: string | number): CollectionResponse {
+  async getResource(offset?: string | number, limit?: string | number): Promise<CollectionResponse> {
     // retriev all element
     let resp: BehaviorSubject<CollectionElement>[];
 
