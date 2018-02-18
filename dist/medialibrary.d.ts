@@ -11,5 +11,4 @@ declare class Tracks extends Resource {
     getElement(elementId: string): Promise<ElementResponse>;
     getResource(offset?: string | number, limit?: string | number): Promise<CollectionResponse>;
 }
-declare const getPlugins: () => (new () => Service)[];
-export { Medialibrary, Media, Tracks, getPlugins };
+export { Medialibrary, Media, Tracks };

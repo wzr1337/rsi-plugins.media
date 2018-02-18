@@ -134,8 +134,4 @@ var Tracks = /** @class */ (function (_super) {
     return Tracks;
 }(core_1.Resource));
 exports.Tracks = Tracks;
-var getPlugins = function () {
-    return [Medialibrary, media_1.Media];
-};
-exports.getPlugins = getPlugins;
 //# sourceMappingURL=medialibrary.js.map
