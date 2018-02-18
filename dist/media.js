@@ -54,8 +54,8 @@ var Media = /** @class */ (function (_super) {
     function Media() {
         var _this = _super.call(this) || this;
         _this.id = "f9a1073f-e90c-4c56-8368-f4c6bd1d8c96"; //random id
-        _this.resources.push(new Renderers(_this));
-        _this.resources.push(new Collections(_this));
+        _this._resources.push(new Renderers(_this));
+        _this._resources.push(new Collections(_this));
         return _this;
     }
     return Media;

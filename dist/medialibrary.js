@@ -57,7 +57,7 @@ var Medialibrary = /** @class */ (function (_super) {
     function Medialibrary() {
         var _this = _super.call(this) || this;
         _this.id = "ea65d5eb-d5fb-4ceb-a568-ed24fcf37e20"; //random id
-        _this.resources.push(new Tracks(_this));
+        _this._resources.push(new Tracks(_this));
         var cnd = server_1.Cdn.getInstance();
         cnd.register('images', 'RLA6JMJK_normal.jpg', function (image) {
             //rsiLogger.getInstance().getLogger("cdn.callback").log('debug', `Looking for ${image}`);
