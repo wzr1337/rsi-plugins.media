@@ -97,10 +97,5 @@ class Tracks extends Resource {
 }
 
 
-const getPlugins = (): Array<new () => Service> => {
-    return [Medialibrary, Media];
-}
-
-
-export { Medialibrary, Media, Tracks, getPlugins };
+export { Medialibrary, Media, Tracks };
 
