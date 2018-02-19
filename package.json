@@ -17,10 +17,10 @@
   "bugs": {
     "url": "https://github.com/wzr1337/rsi-plugins.media/issues"
   },
-  "homepage": "https://github.com/wzr1337/rsi-plugins.medial#readme",
+  "homepage": "https://github.com/wzr1337/rsi-plugins.media#readme",
   "dependencies": {
-    "@rsi/core": "https://github.com/wzr1337/rsi.core#feature/ReasourceAbstractClass",
-    "@rsi/server": "https://github.com/wzr1337/rsi.server#feature/ReasourceAbstractClass",
+    "@rsi/core": "https://github.com/wzr1337/rsi.core",
+    "@rsi/server": "https://github.com/wzr1337/rsi.server",
     "rxjs": "^5.5.6",
     "uuid": "^3.2.1"
   },

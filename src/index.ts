@@ -1,7 +1,9 @@
 import { Media } from "./media";
 import { Medialibrary } from "./medialibrary";
-import { Service } from "@rsi/core/dist/rsiPlugin";
+import { Service } from "@rsi/core";
 
-export const getPlugins = (): Array<new () => Service> => {
-  return [Medialibrary, Media];
+const getPlugins = (): Array<new () => Service> => {
+  return [ Medialibrary, Media ];
 }
+
+export { Media, Medialibrary, getPlugins };
