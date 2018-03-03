@@ -1,5 +1,5 @@
 /* this interface was auto generated from schema.json*/
-export interface mediaLibrarySourceObject {
+export interface IMediaLibrarySourceObject {
   id: string;
   name: string;
   uri: string;
@@ -7,7 +7,7 @@ export interface mediaLibrarySourceObject {
 }
 
 /* this export interface was auto generated from schema.json*/
-export interface trackObject {
+export interface ITrackObject {
   id: string;
   name: string;
   uri: string;
@@ -21,6 +21,7 @@ export interface trackObject {
   disc?: number;
   duration?: number;
   source?: mediaLibrarySourceObject;
+  lastUpdate?: Date;
 }
 
 /* this interface was auto generated from schema.json*/

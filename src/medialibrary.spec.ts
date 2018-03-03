@@ -1,8 +1,6 @@
-import * as Medialibrary from "./index";
+import { CollectionResponse, ElementResponse, IElement } from "@rsi/core";
 import { BehaviorSubject } from "rxjs";
-import { Element, ElementResponse, CollectionResponse} from "@rsi/core";
+import * as Medialibrary from "./index";
 
-
-describe("Service", () => {
+describe("Service", () => { // empty
 });
-
