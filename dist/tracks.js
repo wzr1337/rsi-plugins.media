@@ -45,21 +45,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var fs = require("fs");
-var path = require("path");
-var core_1 = require("@rsi/core");
 var rxjs_1 = require("rxjs");
+var core_1 = require("@rsi/core");
+var mocks_json_1 = require("../data/mocks.json");
 var Tracks = /** @class */ (function (_super) {
     __extends(Tracks, _super);
     // private _logger = RsiLogger.getInstance().getLogger("media");
     function Tracks(service) {
         var _this = _super.call(this, service) || this;
         _this.tracks = [];
-        var mocksPath = path.join(__dirname, "..", "data", "mocks.json");
-        var mocks = JSON.parse(fs.readFileSync(mocksPath).toString());
-        for (var idx in mocks.tracks) {
-            if (mocks.tracks.hasOwnProperty(idx)) {
-                var track = mocks.tracks[idx];
+        // const mocksPath = join(__dirname, "..", "data", "mocks.json");
+        // const mocks = JSON.parse(readFileSync(mocksPath).toString());
+        for (var idx in mocks_json_1.default.tracks) {
+            if (mocks_json_1.default.tracks.hasOwnProperty(idx)) {
+                var track = mocks_json_1.default.tracks[idx];
                 var trackObject = new rxjs_1.BehaviorSubject({
                     data: Object.assign({
                         uri: "/" +

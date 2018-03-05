@@ -1,5 +1,4 @@
-import * as fs from "fs";
-import * as path from "path";
+import { BehaviorSubject } from "rxjs";
 
 import {
   CollectionResponse,
@@ -9,9 +8,10 @@ import {
   Resource,
   Service,
 } from "@rsi/core";
-import { BehaviorSubject, Subject } from "rxjs";
 
 import { ITrackObject } from "./schema";
+
+import mocks from "../data/mocks.json";
 
 interface ITracksElement extends IElement {
   data: ITrackObject;
@@ -23,9 +23,9 @@ export class Tracks extends Resource {
 
   constructor(service: Service) {
     super(service);
-    const mocksPath = path.join(__dirname, "..", "data", "mocks.json");
+    // const mocksPath = join(__dirname, "..", "data", "mocks.json");
+    // const mocks = JSON.parse(readFileSync(mocksPath).toString());
 
-    const mocks = JSON.parse(fs.readFileSync(mocksPath).toString());
     for (const idx in mocks.tracks) {
       if (mocks.tracks.hasOwnProperty(idx)) {
         const track = mocks.tracks[idx];

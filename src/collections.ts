@@ -12,12 +12,11 @@ import {
   StatusCode
 } from "@rsi/core";
 
-import { ItemObject } from "./media.types";
-import { CollectionObject } from "./media.types";
+import { ICollectionObject, IitemObject } from "./media.types";
 import { Medialibrary, Tracks } from "./medialibrary";
 
 interface ICollectionElement extends IElement {
-  data: CollectionObject;
+  data: ICollectionObject;
 }
 
 export class Collections extends Resource {
@@ -170,8 +169,8 @@ export class Collections extends Resource {
 
     return { status: "ok", data: resp };
   }
-  private async _setItems(itemuris: string[]): Promise<ItemObject[] | ElementResponse> {
-    const items: ItemObject[] = [];
+  private async _setItems(itemuris: string[]): Promise<IitemObject[] | ElementResponse> {
+    const items: IitemObject[] = [];
     const regex = /[\w\/\:]*([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fAF]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$/;
     const errors: string[] = [];
     if (this.tracks) {

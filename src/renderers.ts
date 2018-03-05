@@ -10,10 +10,10 @@ import {
   Service,
 } from "@rsi/core";
 
-import { RendererObject } from "./media.types";
+import { IRendererObject } from "./media.types";
 
 interface IRendererElement extends IElement {
-  data: RendererObject;
+  data: IRendererObject;
 }
 
 export class Renderers extends Resource {
@@ -92,7 +92,7 @@ export class Renderers extends Resource {
 
   public async updateElement(elementId: string, difference: any): Promise<ElementResponse> {
     const element: BehaviorSubject<IRendererElement> = (await this.getElement(elementId)).data;
-    const renderer: RendererObject = element.getValue().data;
+    const renderer: IRendererObject = element.getValue().data;
     const propertiesChanged: string[] = [];
 
     if (difference.hasOwnProperty("state")) {

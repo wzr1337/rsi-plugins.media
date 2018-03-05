@@ -1,4 +1,4 @@
-export interface RendererObject {
+export interface IRendererObject {
   id: string;
   name: string;
   uri: string;
@@ -12,18 +12,18 @@ export interface RendererObject {
   type?: "track" | "video" | "image";
 }
 
-export interface CollectionObject {
+export interface ICollectionObject {
   id: string;
   name: string;
   uri: string;
-  items?: ItemObject[];
+  items?: IitemObject[];
 }
 
-export interface ItemObject {
+export interface IitemObject {
   id: string;
   name: string;
   uri: string;
-  collection?: CollectionObject;
+  collection?: ICollectionObject;
   renderable?: {
     id: string;
     name: string;
