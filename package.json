@@ -25,12 +25,13 @@
   "dependencies": {
     "@rsi/core": "https://github.com/wzr1337/rsi.core#0.2.0",
     "@rsi/server": "https://github.com/wzr1337/rsi.server#0.2.0",
-    "rxjs": "^5.5.6",
+    "rxjs": "^5.5.7",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.6",
-    "@types/node": "^9.4.0",
+    "@types/node": "^9.4.7",
+    "jasmine": "^3.1.0",
     "tslint": "^5.9.1",
     "typescript": "^2.7.1"
   }
