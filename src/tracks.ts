@@ -29,11 +29,11 @@ export class Tracks extends Resource {
     for (const idx in mocks.tracks) {
       if (mocks.tracks.hasOwnProperty(idx)) {
         const track = mocks.tracks[idx];
-        const serviceLowerCase = this.service.name.toLowerCase();
-        const nameLowerCase = this.name.toLowerCase();
+        const serviceName = this.service.name.toLowerCase();
+        const name = this.name.toLowerCase();
         const id = track.id;
         const trackObject = new BehaviorSubject<ITracksElement>({
-          data: Object.assign({ uri: `/${service}/${nameLowerCase}/${id}` }, track),
+          data: Object.assign({ uri: `/${serviceName}/${name}/${id}` }, track),
           lastUpdate: Date.now(),
           propertiesChanged: []
         });
