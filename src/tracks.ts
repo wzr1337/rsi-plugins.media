@@ -49,7 +49,10 @@ export class Tracks extends Resource {
       }
     }
 
-    this._change = new BehaviorSubject({ lastUpdate: Date.now(), action: "init" } as IResourceUpdate);
+    this._change = new BehaviorSubject({
+      action: "init",
+      lastUpdate: Date.now()
+    } as IResourceUpdate);
   }
 
   get elementSubscribable(): boolean {
@@ -72,16 +75,13 @@ export class Tracks extends Resource {
   ): Promise<CollectionResponse> {
     // retriev all element
     let resp: Array<BehaviorSubject<ITracksElement>>;
-
-    if (
-      (typeof offset === "number" && typeof limit === "number") ||
-      (typeof limit === "number" && !offset) ||
-      (typeof offset === "number" && !limit) ||
-      (!offset && !limit)
-    ) {
-      resp = this.tracks.slice(offset as number, limit as number);
-    }
-
+    resp = this.tracks.slice(
+      this.castToNumberOrUndefined(offset),
+      this.castToNumberOrUndefined(limit)
+    );
     return { status: "ok", data: resp };
+  }
+  private castToNumberOrUndefined(figure?: any): number | undefined {
+    return typeof figure === "number" ? figure : undefined;
   }
 }
