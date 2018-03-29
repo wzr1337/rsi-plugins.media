@@ -49,27 +49,27 @@ var rxjs_1 = require("rxjs");
 var core_1 = require("@rsi/core");
 var Renderers = /** @class */ (function (_super) {
     __extends(Renderers, _super);
-    function Renderers(service) {
+    function Renderers(service, initialCollection) {
         var _this = _super.call(this, service) || this;
+        _this.id = "d6ebfd90-d2c1-11e6-9376-df943f51f0d8"; // uuid.v1();  // FIXED for now
         _this.renderers = [];
         _this.logger = core_1.RsiLogger.getInstance().getLogger("media.Renderers");
-        // let collections = service.resources.filter<Collections>(resource => resource.name === "collections");
-        // const initialCollection = collections.map( element => element.name === "default");
+        console.log(initialCollection);
         var netfluxRenderer = new rxjs_1.BehaviorSubject({
             data: {
-                id: Renderers.netfluxRendererId,
-                media: "initialCollection",
+                id: _this.id,
+                media: initialCollection,
                 name: "Netflux",
                 offset: 0,
                 repeat: "off",
                 shuffle: "off",
                 state: "idle",
                 uri: "/" +
-                    _this.service.name.toLowerCase() +
+                    _this.service.name +
                     "/" +
-                    _this.name.toLowerCase() +
+                    _this.name +
                     "/" +
-                    Renderers.netfluxRendererId
+                    _this.id
             },
             lastUpdate: Date.now(),
             propertiesChanged: []
@@ -84,6 +84,13 @@ var Renderers = /** @class */ (function (_super) {
     Object.defineProperty(Renderers.prototype, "elementSubscribable", {
         get: function () {
             return true;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Renderers.prototype, "elements", {
+        get: function () {
+            return this.renderers;
         },
         enumerable: true,
         configurable: true
@@ -130,22 +137,27 @@ var Renderers = /** @class */ (function (_super) {
                             renderer.state = difference.state;
                             switch (difference.state) {
                                 case "play":
-                                    if (renderer.id === Renderers.netfluxRendererId) {
-                                        speed_1 = 1000;
-                                        this.interval = setInterval(function () {
-                                            renderer.offset = renderer.hasOwnProperty("offset") ? renderer.offset + speed_1 : 0;
-                                            element.next({
-                                                data: renderer,
-                                                lastUpdate: Date.now(),
-                                                propertiesChanged: ["offset"]
-                                            });
-                                        }, speed_1);
+                                    switch (renderer.id) {
+                                        // mock player requested
+                                        case this.id:
+                                            speed_1 = 1000;
+                                            this.interval = setInterval(function () {
+                                                renderer.offset = renderer.hasOwnProperty("offset") ? renderer.offset + speed_1 : 0;
+                                                element.next({
+                                                    data: renderer,
+                                                    lastUpdate: Date.now(),
+                                                    propertiesChanged: ["offset"]
+                                                });
+                                            }, speed_1);
+                                            break;
+                                        default:
+                                            return [2 /*return*/, { status: "error", error: new Error("Renderer not found"), code: 404 }];
                                     }
                                     break;
                                 default:
                                     switch (renderer.id) {
                                         // mock player requested
-                                        case Renderers.netfluxRendererId:
+                                        case this.id:
                                             clearInterval(this.interval);
                                             break;
                                         default:
@@ -174,7 +186,6 @@ var Renderers = /** @class */ (function (_super) {
             });
         });
     };
-    Renderers.netfluxRendererId = "d6ebfd90-d2c1-11e6-9376-df943f51f0d8"; // uuid.v1();  // FIXED for now
     return Renderers;
 }(core_1.Resource));
 exports.Renderers = Renderers;

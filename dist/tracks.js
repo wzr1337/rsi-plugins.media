@@ -63,9 +63,9 @@ var Tracks = /** @class */ (function (_super) {
                 var trackObject = new rxjs_1.BehaviorSubject({
                     data: Object.assign({
                         uri: "/" +
-                            _this.service.name.toLowerCase() +
+                            _this.service.name +
                             "/" +
-                            _this.name.toLowerCase() +
+                            _this.name +
                             "/" +
                             track.id
                     }, track),
@@ -81,6 +81,13 @@ var Tracks = /** @class */ (function (_super) {
     Object.defineProperty(Tracks.prototype, "elementSubscribable", {
         get: function () {
             return true;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Tracks.prototype, "elements", {
+        get: function () {
+            return this.tracks;
         },
         enumerable: true,
         configurable: true

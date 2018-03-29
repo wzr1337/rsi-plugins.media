@@ -10,28 +10,28 @@ import {
   Service,
 } from "@rsi/core";
 
-import { RendererObject } from "./media.types";
+import { CollectionObject, RendererObject } from "./media.types";
 
 interface IRendererElement extends IElement {
   data: RendererObject;
 }
 
 export class Renderers extends Resource {
-  public static netfluxRendererId = "d6ebfd90-d2c1-11e6-9376-df943f51f0d8"; // uuid.v1();  // FIXED for now
+  public readonly id = "d6ebfd90-d2c1-11e6-9376-df943f51f0d8"; // uuid.v1();  // FIXED for now
 
   private renderers: Array<BehaviorSubject<IRendererElement>> = [];
 
   private logger = RsiLogger.getInstance().getLogger("media.Renderers");
   private interval: NodeJS.Timer; // @TODO has to become per-renderer
 
-  constructor(service: Service) {
+  constructor(service: Service, initialCollection: CollectionObject) {
     super(service);
-    // let collections = service.resources.filter<Collections>(resource => resource.name === "collections");
-    // const initialCollection = collections.map( element => element.name === "default");
+    console.log(initialCollection);
+
     const netfluxRenderer = new BehaviorSubject<IRendererElement>({
       data: {
-        id: Renderers.netfluxRendererId,
-        media: "initialCollection",
+        id: this.id,
+        media: initialCollection,
         name: "Netflux",
         offset: 0,
         repeat: "off",
@@ -39,11 +39,11 @@ export class Renderers extends Resource {
         state: "idle",
         uri:
           "/" +
-          this.service.name.toLowerCase() +
+          this.service.name +
           "/" +
-          this.name.toLowerCase() +
+          this.name +
           "/" +
-          Renderers.netfluxRendererId
+          this.id
       },
       lastUpdate: Date.now(),
       propertiesChanged: []
@@ -58,6 +58,10 @@ export class Renderers extends Resource {
 
   get elementSubscribable(): boolean {
     return true;
+  }
+
+  get elements(): Array<BehaviorSubject<IElement>> {
+    return this.renderers;
   }
 
   public async getElement(elementId: string): Promise<ElementResponse> {
@@ -100,25 +104,29 @@ export class Renderers extends Resource {
 
       switch (difference.state) {
         case "play":
-          if (renderer.id === Renderers.netfluxRendererId) {
-            const speed = 1000;
-            this.interval = setInterval(() => {
-              renderer.offset = renderer.hasOwnProperty("offset") ? renderer.offset + speed : 0;
-              element.next({
-                data: renderer,
-                lastUpdate: Date.now(),
-                propertiesChanged: ["offset"]
-              });
-            }, speed);
+          switch (renderer.id) {
+            // mock player requested
+            case this.id:
+              const speed = 1000;
+              this.interval = setInterval(() => {
+                renderer.offset = renderer.hasOwnProperty("offset") ? renderer.offset + speed : 0;
+                element.next({
+                  data: renderer,
+                  lastUpdate: Date.now(),
+                  propertiesChanged: ["offset"]
+                });
+              }, speed);
+              break;
+            default:
+              return { status: "error", error: new Error("Renderer not found"), code: 404 };
           }
           break;
         default:
           switch (renderer.id) {
             // mock player requested
-            case Renderers.netfluxRendererId:
+            case this.id:
               clearInterval(this.interval);
               break;
-
             default:
               return { status: "error", error: new Error("Renderer not found"), code: 404 };
           }
