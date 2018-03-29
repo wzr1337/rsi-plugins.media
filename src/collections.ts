@@ -13,11 +13,11 @@ import {
 } from "@rsi/core";
 
 import { ItemObject } from "./media.types";
-import { CollectionObject } from "./media.types";
+import { ICollectionObject } from "./media.types";
 import { Medialibrary, Tracks } from "./medialibrary";
 
 interface ICollectionElement extends IElement {
-  data: CollectionObject;
+  data: ICollectionObject;
 }
 
 export class Collections extends Resource {

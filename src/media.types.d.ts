@@ -1,4 +1,6 @@
-export interface RendererObject {
+import { IElement } from "@rsi/core";
+
+export interface IRendererObject {
   id: string;
   name: string;
   uri: string;
@@ -12,7 +14,7 @@ export interface RendererObject {
   type?: "track" | "video" | "image";
 }
 
-export interface CollectionObject {
+export interface ICollectionObject {
   id: string;
   name: string;
   uri: string;
@@ -23,10 +25,14 @@ export interface ItemObject {
   id: string;
   name: string;
   uri: string;
-  collection?: CollectionObject;
+  collection?: ICollectionObject;
   renderable?: {
     id: string;
     name: string;
     uri: string;
   };
+}
+
+export interface IRendererElement extends IElement {
+  data: IRendererObject;
 }

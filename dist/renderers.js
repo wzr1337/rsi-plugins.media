@@ -47,34 +47,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var rxjs_1 = require("rxjs");
 var core_1 = require("@rsi/core");
+var netflux_1 = require("./renderers/netflux");
 var Renderers = /** @class */ (function (_super) {
     __extends(Renderers, _super);
-    function Renderers(service, initialCollection) {
+    function Renderers(service, mediaCollection) {
         var _this = _super.call(this, service) || this;
-        _this.id = "d6ebfd90-d2c1-11e6-9376-df943f51f0d8"; // uuid.v1();  // FIXED for now
+        _this.mediaCollection = mediaCollection;
         _this.renderers = [];
         _this.logger = core_1.RsiLogger.getInstance().getLogger("media.Renderers");
-        console.log(initialCollection);
-        var netfluxRenderer = new rxjs_1.BehaviorSubject({
-            data: {
-                id: _this.id,
-                media: initialCollection,
-                name: "Netflux",
-                offset: 0,
-                repeat: "off",
-                shuffle: "off",
-                state: "idle",
-                uri: "/" +
-                    _this.service.name +
-                    "/" +
-                    _this.name +
-                    "/" +
-                    _this.id
-            },
-            lastUpdate: Date.now(),
-            propertiesChanged: []
-        });
-        _this.renderers.push(netfluxRenderer);
+        _this.nR = new netflux_1.NetfluxRenderer(service, _this, mediaCollection);
+        _this.renderers.push(_this.nR.subject);
         _this._change = new rxjs_1.BehaviorSubject({
             action: "init",
             lastUpdate: Date.now()
@@ -125,7 +107,7 @@ var Renderers = /** @class */ (function (_super) {
     };
     Renderers.prototype.updateElement = function (elementId, difference) {
         return __awaiter(this, void 0, void 0, function () {
-            var element, renderer, propertiesChanged, speed_1, resp;
+            var element, renderer, propertiesChanged, resp;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.getElement(elementId)];
@@ -139,16 +121,8 @@ var Renderers = /** @class */ (function (_super) {
                                 case "play":
                                     switch (renderer.id) {
                                         // mock player requested
-                                        case this.id:
-                                            speed_1 = 1000;
-                                            this.interval = setInterval(function () {
-                                                renderer.offset = renderer.hasOwnProperty("offset") ? renderer.offset + speed_1 : 0;
-                                                element.next({
-                                                    data: renderer,
-                                                    lastUpdate: Date.now(),
-                                                    propertiesChanged: ["offset"]
-                                                });
-                                            }, speed_1);
+                                        case this.nR.id:
+                                            this.nR.play();
                                             break;
                                         default:
                                             return [2 /*return*/, { status: "error", error: new Error("Renderer not found"), code: 404 }];
@@ -157,8 +131,8 @@ var Renderers = /** @class */ (function (_super) {
                                 default:
                                     switch (renderer.id) {
                                         // mock player requested
-                                        case this.id:
-                                            clearInterval(this.interval);
+                                        case this.nR.id:
+                                            this.nR.stop();
                                             break;
                                         default:
                                             return [2 /*return*/, { status: "error", error: new Error("Renderer not found"), code: 404 }];
@@ -177,6 +151,14 @@ var Renderers = /** @class */ (function (_super) {
                             if (-1 !== ["off", "one", "all"].indexOf(difference.repeat)) {
                                 renderer.repeat = difference.repeat;
                                 propertiesChanged.push("repeat");
+                            }
+                        }
+                        if (difference.hasOwnProperty("currentMediaItem")) {
+                            if (1 === 1) {
+                                propertiesChanged.push("currentMediaItem");
+                            }
+                            else {
+                                return [2 /*return*/, { status: "error", error: new Error("currentMediaItem not found"), code: 500 }];
                             }
                         }
                         resp = { data: renderer, lastUpdate: Date.now(), propertiesChanged: propertiesChanged };

@@ -16,6 +16,7 @@ import { ITrackObject } from "./schema";
 interface ITracksElement extends IElement {
   data: ITrackObject;
 }
+
 export class Tracks extends Resource {
   private tracks: Array<BehaviorSubject<ITracksElement>> = [];
 

@@ -10,45 +10,18 @@ import {
   Service,
 } from "@rsi/core";
 
-import { CollectionObject, RendererObject } from "./media.types";
-
-interface IRendererElement extends IElement {
-  data: RendererObject;
-}
+import { ICollectionObject, IRendererElement, IRendererObject } from "./media.types";
+import { NetfluxRenderer } from "./renderers/netflux";
 
 export class Renderers extends Resource {
-  public readonly id = "d6ebfd90-d2c1-11e6-9376-df943f51f0d8"; // uuid.v1();  // FIXED for now
-
   private renderers: Array<BehaviorSubject<IRendererElement>> = [];
-
+  private nR: NetfluxRenderer;
   private logger = RsiLogger.getInstance().getLogger("media.Renderers");
-  private interval: NodeJS.Timer; // @TODO has to become per-renderer
 
-  constructor(service: Service, initialCollection: CollectionObject) {
+  constructor(service: Service, private mediaCollection: ICollectionObject) {
     super(service);
-    console.log(initialCollection);
-
-    const netfluxRenderer = new BehaviorSubject<IRendererElement>({
-      data: {
-        id: this.id,
-        media: initialCollection,
-        name: "Netflux",
-        offset: 0,
-        repeat: "off",
-        shuffle: "off",
-        state: "idle",
-        uri:
-          "/" +
-          this.service.name +
-          "/" +
-          this.name +
-          "/" +
-          this.id
-      },
-      lastUpdate: Date.now(),
-      propertiesChanged: []
-    });
-    this.renderers.push(netfluxRenderer);
+    this.nR = new NetfluxRenderer(service, this, mediaCollection);
+    this.renderers.push(this.nR.subject);
 
     this._change = new BehaviorSubject({
       action: "init",
@@ -96,7 +69,7 @@ export class Renderers extends Resource {
 
   public async updateElement(elementId: string, difference: any): Promise<ElementResponse> {
     const element: BehaviorSubject<IRendererElement> = (await this.getElement(elementId)).data;
-    const renderer: RendererObject = element.getValue().data;
+    const renderer: IRendererObject = element.getValue().data;
     const propertiesChanged: string[] = [];
 
     if (difference.hasOwnProperty("state")) {
@@ -106,16 +79,8 @@ export class Renderers extends Resource {
         case "play":
           switch (renderer.id) {
             // mock player requested
-            case this.id:
-              const speed = 1000;
-              this.interval = setInterval(() => {
-                renderer.offset = renderer.hasOwnProperty("offset") ? renderer.offset + speed : 0;
-                element.next({
-                  data: renderer,
-                  lastUpdate: Date.now(),
-                  propertiesChanged: ["offset"]
-                });
-              }, speed);
+            case this.nR.id:
+              this.nR.play();
               break;
             default:
               return { status: "error", error: new Error("Renderer not found"), code: 404 };
@@ -124,8 +89,8 @@ export class Renderers extends Resource {
         default:
           switch (renderer.id) {
             // mock player requested
-            case this.id:
-              clearInterval(this.interval);
+            case this.nR.id:
+              this.nR.stop();
               break;
             default:
               return { status: "error", error: new Error("Renderer not found"), code: 404 };
@@ -144,6 +109,15 @@ export class Renderers extends Resource {
       if (-1 !== ["off", "one", "all"].indexOf(difference.repeat)) {
         renderer.repeat = difference.repeat;
         propertiesChanged.push("repeat");
+      }
+    }
+    if (difference.hasOwnProperty("currentMediaItem")) {
+
+      if ( 1 === 1) {
+
+        propertiesChanged.push("currentMediaItem");
+      } else {
+        return { status: "error", error: new Error("currentMediaItem not found"), code: 500 };
       }
     }
     const resp = { data: renderer, lastUpdate: Date.now(), propertiesChanged };

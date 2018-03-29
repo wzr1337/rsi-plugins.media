@@ -1,12 +1,12 @@
 import { BehaviorSubject } from "rxjs";
 import { CollectionResponse, ElementResponse, IElement, Resource, Service } from "@rsi/core";
-import { CollectionObject } from "./media.types";
+import { ICollectionObject } from "./media.types";
 export declare class Renderers extends Resource {
-    readonly id: string;
+    private mediaCollection;
     private renderers;
+    private nR;
     private logger;
-    private interval;
-    constructor(service: Service, initialCollection: CollectionObject);
+    constructor(service: Service, mediaCollection: ICollectionObject);
     readonly elementSubscribable: boolean;
     readonly elements: Array<BehaviorSubject<IElement>>;
     getElement(elementId: string): Promise<ElementResponse>;
