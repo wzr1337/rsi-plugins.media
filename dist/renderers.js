@@ -56,7 +56,7 @@ var Renderers = /** @class */ (function (_super) {
         _this.renderers = [];
         _this.logger = core_1.RsiLogger.getInstance().getLogger("media.Renderers");
         _this.nR = new netflux_1.NetfluxRenderer(service, _this, mediaCollection);
-        _this.renderers.push(_this.nR.subject);
+        _this.renderers.push(_this.nR);
         _this._change = new rxjs_1.BehaviorSubject({
             action: "init",
             lastUpdate: Date.now()
@@ -107,64 +107,52 @@ var Renderers = /** @class */ (function (_super) {
     };
     Renderers.prototype.updateElement = function (elementId, difference) {
         return __awaiter(this, void 0, void 0, function () {
-            var element, renderer, propertiesChanged, resp;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.getElement(elementId)];
-                    case 1:
-                        element = (_a.sent()).data;
-                        renderer = element.getValue().data;
-                        propertiesChanged = [];
-                        if (difference.hasOwnProperty("state")) {
-                            renderer.state = difference.state;
-                            switch (difference.state) {
-                                case "play":
-                                    switch (renderer.id) {
-                                        // mock player requested
-                                        case this.nR.id:
-                                            this.nR.play();
-                                            break;
-                                        default:
-                                            return [2 /*return*/, { status: "error", error: new Error("Renderer not found"), code: 404 }];
-                                    }
+                if (difference.hasOwnProperty("state")) {
+                    switch (difference.state) {
+                        case "play":
+                            switch (this.nR.id) {
+                                // mock player requested
+                                case this.nR.id:
+                                    this.nR.play();
                                     break;
                                 default:
-                                    switch (renderer.id) {
-                                        // mock player requested
-                                        case this.nR.id:
-                                            this.nR.stop();
-                                            break;
-                                        default:
-                                            return [2 /*return*/, { status: "error", error: new Error("Renderer not found"), code: 404 }];
-                                    }
+                                    return [2 /*return*/, { status: "error", error: new Error("Renderer not found"), code: 404 }];
+                            }
+                            break;
+                        default:
+                            switch (this.nR.id) {
+                                // mock player requested
+                                case this.nR.id:
+                                    this.nR.stop();
                                     break;
+                                default:
+                                    return [2 /*return*/, { status: "error", error: new Error("Renderer not found"), code: 404 }];
                             }
-                            propertiesChanged.push("state");
-                        }
-                        if (difference.hasOwnProperty("shuffle")) {
-                            if (-1 !== ["off", "on"].indexOf(difference.shuffle)) {
-                                renderer.shuffle = difference.shuffle;
-                                propertiesChanged.push("shuffle");
-                            }
-                        }
-                        if (difference.hasOwnProperty("repeat")) {
-                            if (-1 !== ["off", "one", "all"].indexOf(difference.repeat)) {
-                                renderer.repeat = difference.repeat;
-                                propertiesChanged.push("repeat");
-                            }
-                        }
-                        if (difference.hasOwnProperty("currentMediaItem")) {
-                            if (1 === 1) {
-                                propertiesChanged.push("currentMediaItem");
-                            }
-                            else {
-                                return [2 /*return*/, { status: "error", error: new Error("currentMediaItem not found"), code: 500 }];
-                            }
-                        }
-                        resp = { data: renderer, lastUpdate: Date.now(), propertiesChanged: propertiesChanged };
-                        element.next(resp); // @TODO: check diffs bevor updating without a need
-                        return [2 /*return*/, { status: "ok" }];
+                            break;
+                    }
                 }
+                if (difference.hasOwnProperty("shuffle")) {
+                    if (-1 !== ["off", "on"].indexOf(difference.shuffle)) {
+                        this.nR.setShuffle(difference.shuffle);
+                    }
+                }
+                if (difference.hasOwnProperty("repeat")) {
+                    if (-1 !== ["off", "repeatone", "repeatall"].indexOf(difference.repeat)) {
+                        this.nR.setShuffle(difference.repeat);
+                    }
+                }
+                if (difference.hasOwnProperty("currentMediaItem")) {
+                    if (1 === 1) {
+                        throw new Error("Not implemeneted yet");
+                        // propertiesChanged.push("currentMediaItem");
+                    }
+                    else {
+                        return [2 /*return*/, { status: "error", error: new Error("currentMediaItem not found"), code: 500 }];
+                    }
+                }
+                this.nR.next();
+                return [2 /*return*/, { status: "ok" }];
             });
         });
     };

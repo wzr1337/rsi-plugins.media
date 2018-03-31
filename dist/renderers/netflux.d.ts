@@ -1,16 +1,20 @@
 import { BehaviorSubject } from "rxjs";
 import { ICollectionObject, IRendererElement } from "../media.types";
-export declare class NetfluxRenderer {
+export declare class NetfluxRenderer extends BehaviorSubject<IRendererElement> {
     private service;
     private resource;
     private mediaCollection;
-    readonly subject: BehaviorSubject<IRendererElement>;
-    readonly id: any;
     private interval;
     private renderer;
+    private propertiesChanged;
+    private shuffleMode;
     private logger;
     constructor(service: any, resource: any, mediaCollection: ICollectionObject);
     play(): void;
     pause(): void;
     stop(): void;
+    setShuffle(mode: "on" | "off"): void;
+    setRepeat(mode: "off" | "repeatall" | "repeatone"): void;
+    next(): void;
+    readonly id: string;
 }

@@ -21,7 +21,7 @@ export class Renderers extends Resource {
   constructor(service: Service, private mediaCollection: ICollectionObject) {
     super(service);
     this.nR = new NetfluxRenderer(service, this, mediaCollection);
-    this.renderers.push(this.nR.subject);
+    this.renderers.push(this.nR);
 
     this._change = new BehaviorSubject({
       action: "init",
@@ -68,16 +68,10 @@ export class Renderers extends Resource {
   }
 
   public async updateElement(elementId: string, difference: any): Promise<ElementResponse> {
-    const element: BehaviorSubject<IRendererElement> = (await this.getElement(elementId)).data;
-    const renderer: IRendererObject = element.getValue().data;
-    const propertiesChanged: string[] = [];
-
     if (difference.hasOwnProperty("state")) {
-      renderer.state = difference.state;
-
       switch (difference.state) {
         case "play":
-          switch (renderer.id) {
+          switch (this.nR.id) {
             // mock player requested
             case this.nR.id:
               this.nR.play();
@@ -87,7 +81,7 @@ export class Renderers extends Resource {
           }
           break;
         default:
-          switch (renderer.id) {
+          switch (this.nR.id) {
             // mock player requested
             case this.nR.id:
               this.nR.stop();
@@ -97,31 +91,27 @@ export class Renderers extends Resource {
           }
           break;
       }
-      propertiesChanged.push("state");
     }
     if (difference.hasOwnProperty("shuffle")) {
       if (-1 !== ["off", "on"].indexOf(difference.shuffle)) {
-        renderer.shuffle = difference.shuffle;
-        propertiesChanged.push("shuffle");
+        this.nR.setShuffle(difference.shuffle);
       }
     }
     if (difference.hasOwnProperty("repeat")) {
-      if (-1 !== ["off", "one", "all"].indexOf(difference.repeat)) {
-        renderer.repeat = difference.repeat;
-        propertiesChanged.push("repeat");
+      if (-1 !== ["off", "repeatone", "repeatall"].indexOf(difference.repeat)) {
+        this.nR.setShuffle(difference.repeat);
       }
     }
     if (difference.hasOwnProperty("currentMediaItem")) {
 
       if ( 1 === 1) {
-
-        propertiesChanged.push("currentMediaItem");
+        throw new Error("Not implemeneted yet");
+        // propertiesChanged.push("currentMediaItem");
       } else {
         return { status: "error", error: new Error("currentMediaItem not found"), code: 500 };
       }
     }
-    const resp = { data: renderer, lastUpdate: Date.now(), propertiesChanged };
-    element.next(resp); // @TODO: check diffs bevor updating without a need
+    this.nR.next();
     return { status: "ok" };
   }
 }
