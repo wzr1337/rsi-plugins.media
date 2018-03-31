@@ -1,6 +1,6 @@
 {
   "name": "@rsi-plugins/media",
-  "version": "0.2.0",
+  "version": "0.2.3",
   "description": "media and medialibrary plugin",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/wzr1337/rsi-plugins.media#readme",
   "dependencies": {
-    "@rsi/core": "https://github.com/wzr1337/rsi.core#feature/directElementAccess",
+    "@rsi/core": "https://github.com/wzr1337/rsi.core#0.2.3",
     "@rsi/server": "https://github.com/wzr1337/rsi.server#0.2.0",
     "rxjs": "^5.5.6",
     "uuid": "^3.2.1"
