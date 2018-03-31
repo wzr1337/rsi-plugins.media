@@ -13,11 +13,11 @@ import {
 } from "@rsi/core";
 
 import { ItemObject } from "./media.types";
-import { CollectionObject } from "./media.types";
+import { ICollectionObject } from "./media.types";
 import { Medialibrary, Tracks } from "./medialibrary";
 
 interface ICollectionElement extends IElement {
-  data: CollectionObject;
+  data: ICollectionObject;
 }
 
 export class Collections extends Resource {
@@ -36,9 +36,9 @@ export class Collections extends Resource {
         name: "default",
         uri:
         "/" +
-        this.service.name.toLowerCase() +
+        this.service.name +
         "/" +
-        this.name.toLowerCase() +
+        this.name +
         "/" +
         collectionId
       },
@@ -102,9 +102,9 @@ export class Collections extends Resource {
         name: state.name,
         uri:
         "/" +
-        this.service.name.toLowerCase() +
+        this.service.name +
         "/" +
-        this.name.toLowerCase() +
+        this.name +
         "/" +
         collectionId
       },
@@ -170,6 +170,11 @@ export class Collections extends Resource {
 
     return { status: "ok", data: resp };
   }
+
+  get elements(): Array<BehaviorSubject<IElement>> {
+    return this.collections;
+  }
+
   private async _setItems(itemuris: string[]): Promise<ItemObject[] | ElementResponse> {
     const items: ItemObject[] = [];
     const regex = /[\w\/\:]*([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fAF]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$/;

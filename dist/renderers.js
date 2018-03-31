@@ -47,34 +47,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var rxjs_1 = require("rxjs");
 var core_1 = require("@rsi/core");
+var netflux_1 = require("./renderers/netflux");
 var Renderers = /** @class */ (function (_super) {
     __extends(Renderers, _super);
-    function Renderers(service) {
+    function Renderers(service, mediaCollection) {
         var _this = _super.call(this, service) || this;
+        _this.mediaCollection = mediaCollection;
         _this.renderers = [];
         _this.logger = core_1.RsiLogger.getInstance().getLogger("media.Renderers");
-        // let collections = service.resources.filter<Collections>(resource => resource.name === "collections");
-        // const initialCollection = collections.map( element => element.name === "default");
-        var netfluxRenderer = new rxjs_1.BehaviorSubject({
-            data: {
-                id: Renderers.netfluxRendererId,
-                media: "initialCollection",
-                name: "Netflux",
-                offset: 0,
-                repeat: "off",
-                shuffle: "off",
-                state: "idle",
-                uri: "/" +
-                    _this.service.name.toLowerCase() +
-                    "/" +
-                    _this.name.toLowerCase() +
-                    "/" +
-                    Renderers.netfluxRendererId
-            },
-            lastUpdate: Date.now(),
-            propertiesChanged: []
-        });
-        _this.renderers.push(netfluxRenderer);
+        _this.nR = new netflux_1.NetfluxRenderer(service, _this, mediaCollection);
+        _this.renderers.push(_this.nR);
         _this._change = new rxjs_1.BehaviorSubject({
             action: "init",
             lastUpdate: Date.now()
@@ -84,6 +66,13 @@ var Renderers = /** @class */ (function (_super) {
     Object.defineProperty(Renderers.prototype, "elementSubscribable", {
         get: function () {
             return true;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Renderers.prototype, "elements", {
+        get: function () {
+            return this.renderers;
         },
         enumerable: true,
         configurable: true
@@ -118,63 +107,55 @@ var Renderers = /** @class */ (function (_super) {
     };
     Renderers.prototype.updateElement = function (elementId, difference) {
         return __awaiter(this, void 0, void 0, function () {
-            var element, renderer, propertiesChanged, speed_1, resp;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.getElement(elementId)];
-                    case 1:
-                        element = (_a.sent()).data;
-                        renderer = element.getValue().data;
-                        propertiesChanged = [];
-                        if (difference.hasOwnProperty("state")) {
-                            renderer.state = difference.state;
-                            switch (difference.state) {
-                                case "play":
-                                    if (renderer.id === Renderers.netfluxRendererId) {
-                                        speed_1 = 1000;
-                                        this.interval = setInterval(function () {
-                                            renderer.offset = renderer.hasOwnProperty("offset") ? renderer.offset + speed_1 : 0;
-                                            element.next({
-                                                data: renderer,
-                                                lastUpdate: Date.now(),
-                                                propertiesChanged: ["offset"]
-                                            });
-                                        }, speed_1);
-                                    }
+                if (difference.hasOwnProperty("state")) {
+                    switch (difference.state) {
+                        case "play":
+                            switch (this.nR.id) {
+                                // mock player requested
+                                case this.nR.id:
+                                    this.nR.play();
                                     break;
                                 default:
-                                    switch (renderer.id) {
-                                        // mock player requested
-                                        case Renderers.netfluxRendererId:
-                                            clearInterval(this.interval);
-                                            break;
-                                        default:
-                                            return [2 /*return*/, { status: "error", error: new Error("Renderer not found"), code: 404 }];
-                                    }
+                                    return [2 /*return*/, { status: "error", error: new Error("Renderer not found"), code: 404 }];
+                            }
+                            break;
+                        default:
+                            switch (this.nR.id) {
+                                // mock player requested
+                                case this.nR.id:
+                                    this.nR.stop();
                                     break;
+                                default:
+                                    return [2 /*return*/, { status: "error", error: new Error("Renderer not found"), code: 404 }];
                             }
-                            propertiesChanged.push("state");
-                        }
-                        if (difference.hasOwnProperty("shuffle")) {
-                            if (-1 !== ["off", "on"].indexOf(difference.shuffle)) {
-                                renderer.shuffle = difference.shuffle;
-                                propertiesChanged.push("shuffle");
-                            }
-                        }
-                        if (difference.hasOwnProperty("repeat")) {
-                            if (-1 !== ["off", "one", "all"].indexOf(difference.repeat)) {
-                                renderer.repeat = difference.repeat;
-                                propertiesChanged.push("repeat");
-                            }
-                        }
-                        resp = { data: renderer, lastUpdate: Date.now(), propertiesChanged: propertiesChanged };
-                        element.next(resp); // @TODO: check diffs bevor updating without a need
-                        return [2 /*return*/, { status: "ok" }];
+                            break;
+                    }
                 }
+                if (difference.hasOwnProperty("shuffle")) {
+                    if (-1 !== ["off", "on"].indexOf(difference.shuffle)) {
+                        this.nR.setShuffle(difference.shuffle);
+                    }
+                }
+                if (difference.hasOwnProperty("repeat")) {
+                    if (-1 !== ["off", "repeatone", "repeatall"].indexOf(difference.repeat)) {
+                        this.nR.setShuffle(difference.repeat);
+                    }
+                }
+                if (difference.hasOwnProperty("currentMediaItem")) {
+                    if (1 === 1) {
+                        throw new Error("Not implemeneted yet");
+                        // propertiesChanged.push("currentMediaItem");
+                    }
+                    else {
+                        return [2 /*return*/, { status: "error", error: new Error("currentMediaItem not found"), code: 500 }];
+                    }
+                }
+                this.nR.next();
+                return [2 /*return*/, { status: "ok" }];
             });
         });
     };
-    Renderers.netfluxRendererId = "d6ebfd90-d2c1-11e6-9376-df943f51f0d8"; // uuid.v1();  // FIXED for now
     return Renderers;
 }(core_1.Resource));
 exports.Renderers = Renderers;

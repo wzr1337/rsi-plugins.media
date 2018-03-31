@@ -62,9 +62,9 @@ var Collections = /** @class */ (function (_super) {
                 items: [],
                 name: "default",
                 uri: "/" +
-                    _this.service.name.toLowerCase() +
+                    _this.service.name +
                     "/" +
-                    _this.name.toLowerCase() +
+                    _this.name +
                     "/" +
                     collectionId
             },
@@ -141,9 +141,9 @@ var Collections = /** @class */ (function (_super) {
                                 items: items,
                                 name: state.name,
                                 uri: "/" +
-                                    this.service.name.toLowerCase() +
+                                    this.service.name +
                                     "/" +
-                                    this.name.toLowerCase() +
+                                    this.name +
                                     "/" +
                                     collectionId
                             },
@@ -215,6 +215,13 @@ var Collections = /** @class */ (function (_super) {
             });
         });
     };
+    Object.defineProperty(Collections.prototype, "elements", {
+        get: function () {
+            return this.collections;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Collections.prototype._setItems = function (itemuris) {
         return __awaiter(this, void 0, void 0, function () {
             var items, regex, errors, _a, _b, _i, index, uri, match, id, track;

@@ -16,6 +16,7 @@ import { ITrackObject } from "./schema";
 interface ITracksElement extends IElement {
   data: ITrackObject;
 }
+
 export class Tracks extends Resource {
   private tracks: Array<BehaviorSubject<ITracksElement>> = [];
 
@@ -34,9 +35,9 @@ export class Tracks extends Resource {
             {
               uri:
                 "/" +
-                this.service.name.toLowerCase() +
+                this.service.name +
                 "/" +
-                this.name.toLowerCase() +
+                this.name +
                 "/" +
                 track.id
             },
@@ -54,6 +55,10 @@ export class Tracks extends Resource {
 
   get elementSubscribable(): boolean {
     return true;
+  }
+
+  get elements(): Array<BehaviorSubject<IElement>> {
+    return this.tracks;
   }
 
   public async getElement(elementId: string): Promise<ElementResponse> {

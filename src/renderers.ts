@@ -10,45 +10,18 @@ import {
   Service,
 } from "@rsi/core";
 
-import { RendererObject } from "./media.types";
-
-interface IRendererElement extends IElement {
-  data: RendererObject;
-}
+import { ICollectionObject, IRendererElement, IRendererObject } from "./media.types";
+import { NetfluxRenderer } from "./renderers/netflux";
 
 export class Renderers extends Resource {
-  public static netfluxRendererId = "d6ebfd90-d2c1-11e6-9376-df943f51f0d8"; // uuid.v1();  // FIXED for now
-
   private renderers: Array<BehaviorSubject<IRendererElement>> = [];
-
+  private nR: NetfluxRenderer;
   private logger = RsiLogger.getInstance().getLogger("media.Renderers");
-  private interval: NodeJS.Timer; // @TODO has to become per-renderer
 
-  constructor(service: Service) {
+  constructor(service: Service, private mediaCollection: ICollectionObject) {
     super(service);
-    // let collections = service.resources.filter<Collections>(resource => resource.name === "collections");
-    // const initialCollection = collections.map( element => element.name === "default");
-    const netfluxRenderer = new BehaviorSubject<IRendererElement>({
-      data: {
-        id: Renderers.netfluxRendererId,
-        media: "initialCollection",
-        name: "Netflux",
-        offset: 0,
-        repeat: "off",
-        shuffle: "off",
-        state: "idle",
-        uri:
-          "/" +
-          this.service.name.toLowerCase() +
-          "/" +
-          this.name.toLowerCase() +
-          "/" +
-          Renderers.netfluxRendererId
-      },
-      lastUpdate: Date.now(),
-      propertiesChanged: []
-    });
-    this.renderers.push(netfluxRenderer);
+    this.nR = new NetfluxRenderer(service, this, mediaCollection);
+    this.renderers.push(this.nR);
 
     this._change = new BehaviorSubject({
       action: "init",
@@ -58,6 +31,10 @@ export class Renderers extends Resource {
 
   get elementSubscribable(): boolean {
     return true;
+  }
+
+  get elements(): Array<BehaviorSubject<IElement>> {
+    return this.renderers;
   }
 
   public async getElement(elementId: string): Promise<ElementResponse> {
@@ -91,55 +68,50 @@ export class Renderers extends Resource {
   }
 
   public async updateElement(elementId: string, difference: any): Promise<ElementResponse> {
-    const element: BehaviorSubject<IRendererElement> = (await this.getElement(elementId)).data;
-    const renderer: RendererObject = element.getValue().data;
-    const propertiesChanged: string[] = [];
-
     if (difference.hasOwnProperty("state")) {
-      renderer.state = difference.state;
-
       switch (difference.state) {
         case "play":
-          if (renderer.id === Renderers.netfluxRendererId) {
-            const speed = 1000;
-            this.interval = setInterval(() => {
-              renderer.offset = renderer.hasOwnProperty("offset") ? renderer.offset + speed : 0;
-              element.next({
-                data: renderer,
-                lastUpdate: Date.now(),
-                propertiesChanged: ["offset"]
-              });
-            }, speed);
+          switch (this.nR.id) {
+            // mock player requested
+            case this.nR.id:
+              this.nR.play();
+              break;
+            default:
+              return { status: "error", error: new Error("Renderer not found"), code: 404 };
           }
           break;
         default:
-          switch (renderer.id) {
+          switch (this.nR.id) {
             // mock player requested
-            case Renderers.netfluxRendererId:
-              clearInterval(this.interval);
+            case this.nR.id:
+              this.nR.stop();
               break;
-
             default:
               return { status: "error", error: new Error("Renderer not found"), code: 404 };
           }
           break;
       }
-      propertiesChanged.push("state");
     }
     if (difference.hasOwnProperty("shuffle")) {
       if (-1 !== ["off", "on"].indexOf(difference.shuffle)) {
-        renderer.shuffle = difference.shuffle;
-        propertiesChanged.push("shuffle");
+        this.nR.setShuffle(difference.shuffle);
       }
     }
     if (difference.hasOwnProperty("repeat")) {
-      if (-1 !== ["off", "one", "all"].indexOf(difference.repeat)) {
-        renderer.repeat = difference.repeat;
-        propertiesChanged.push("repeat");
+      if (-1 !== ["off", "repeatone", "repeatall"].indexOf(difference.repeat)) {
+        this.nR.setShuffle(difference.repeat);
       }
     }
-    const resp = { data: renderer, lastUpdate: Date.now(), propertiesChanged };
-    element.next(resp); // @TODO: check diffs bevor updating without a need
+    if (difference.hasOwnProperty("currentMediaItem")) {
+
+      if ( 1 === 1) {
+        throw new Error("Not implemeneted yet");
+        // propertiesChanged.push("currentMediaItem");
+      } else {
+        return { status: "error", error: new Error("currentMediaItem not found"), code: 500 };
+      }
+    }
+    this.nR.next();
     return { status: "ok" };
   }
 }
