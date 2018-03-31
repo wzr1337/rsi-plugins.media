@@ -53,7 +53,6 @@ var Collections = /** @class */ (function (_super) {
     __extends(Collections, _super);
     function Collections(service) {
         var _this = _super.call(this, service) || this;
-        _this.collections = [];
         _this.logger = core_1.RsiLogger.getInstance().getLogger("media.Collections");
         var collectionId = "deadbeef-d2c1-11e6-9376-df943f51f0d8";
         var initialCollection = new rxjs_1.BehaviorSubject({
@@ -71,7 +70,7 @@ var Collections = /** @class */ (function (_super) {
             lastUpdate: Date.now(),
             propertiesChanged: []
         });
-        _this.collections.push(initialCollection);
+        _this.addElement(initialCollection);
         _this._change = new rxjs_1.BehaviorSubject({ lastUpdate: Date.now(), action: "init" });
         _this.medialibrary = new medialibrary_1.Medialibrary();
         _this.tracks = _this.medialibrary.getResource("Tracks");
@@ -98,19 +97,6 @@ var Collections = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Collections.prototype.getElement = function (elementId) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                // find the element requested by the client
-                return [2 /*return*/, {
-                        data: this.collections.find(function (element) {
-                            return element.getValue().data.id === elementId;
-                        }),
-                        status: "ok"
-                    }];
-            });
-        });
-    };
     Collections.prototype.createElement = function (state) {
         return __awaiter(this, void 0, void 0, function () {
             var collectionId, items, newCollection;
@@ -150,7 +136,7 @@ var Collections = /** @class */ (function (_super) {
                             lastUpdate: Date.now(),
                             propertiesChanged: []
                         });
-                        this.collections.push(newCollection);
+                        this.addElement(newCollection);
                         /** publish a resource change */
                         this._change.next({ lastUpdate: Date.now(), action: "add" });
                         /** return success */
@@ -188,40 +174,14 @@ var Collections = /** @class */ (function (_super) {
     };
     Collections.prototype.deleteElement = function (elementId) {
         return __awaiter(this, void 0, void 0, function () {
-            var idx;
             return __generator(this, function (_a) {
-                idx = this.collections.findIndex(function (element, index) {
-                    return element.getValue().data.id === elementId;
-                });
-                if (-1 !== idx) {
-                    this.collections.splice(idx, 1); // remove one item from the collections array
+                if (this.removeElement(elementId)) {
                     return [2 /*return*/, { status: "ok" }];
                 }
                 return [2 /*return*/, { status: "error", code: 404, message: "Element can not be found" }];
             });
         });
     };
-    Collections.prototype.getResource = function (offset, limit) {
-        return __awaiter(this, void 0, void 0, function () {
-            var resp;
-            return __generator(this, function (_a) {
-                if ((typeof offset === "number" && typeof limit === "number") ||
-                    (typeof limit === "number" && !offset) ||
-                    (typeof offset === "number" && !limit) ||
-                    (!offset && !limit)) {
-                    resp = this.collections.slice(offset, limit);
-                }
-                return [2 /*return*/, { status: "ok", data: resp }];
-            });
-        });
-    };
-    Object.defineProperty(Collections.prototype, "elements", {
-        get: function () {
-            return this.collections;
-        },
-        enumerable: true,
-        configurable: true
-    });
     Collections.prototype._setItems = function (itemuris) {
         return __awaiter(this, void 0, void 0, function () {
             var items, regex, errors, _a, _b, _i, index, uri, match, id, track;

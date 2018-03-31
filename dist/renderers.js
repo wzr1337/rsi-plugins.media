@@ -45,7 +45,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var rxjs_1 = require("rxjs");
 var core_1 = require("@rsi/core");
 var netflux_1 = require("./renderers/netflux");
 var Renderers = /** @class */ (function (_super) {
@@ -53,14 +52,9 @@ var Renderers = /** @class */ (function (_super) {
     function Renderers(service, mediaCollection) {
         var _this = _super.call(this, service) || this;
         _this.mediaCollection = mediaCollection;
-        _this.renderers = [];
         _this.logger = core_1.RsiLogger.getInstance().getLogger("media.Renderers");
-        _this.nR = new netflux_1.NetfluxRenderer(service, _this, mediaCollection);
-        _this.renderers.push(_this.nR);
-        _this._change = new rxjs_1.BehaviorSubject({
-            action: "init",
-            lastUpdate: Date.now()
-        });
+        _this.netfluxRenderer = new netflux_1.NetfluxRenderer(service, _this, mediaCollection);
+        _this.addElement(_this.netfluxRenderer);
         return _this;
     }
     Object.defineProperty(Renderers.prototype, "elementSubscribable", {
@@ -70,61 +64,26 @@ var Renderers = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Renderers.prototype, "elements", {
-        get: function () {
-            return this.renderers;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Renderers.prototype.getElement = function (elementId) {
-        return __awaiter(this, void 0, void 0, function () {
-            var data;
-            return __generator(this, function (_a) {
-                data = this.renderers.find(function (element) {
-                    if (element) {
-                        return element.getValue().data.id === elementId;
-                    }
-                    return undefined;
-                });
-                return [2 /*return*/, data ? { data: data, status: "ok" } : undefined];
-            });
-        });
-    };
-    Renderers.prototype.getResource = function (offset, limit) {
-        return __awaiter(this, void 0, void 0, function () {
-            var resp;
-            return __generator(this, function (_a) {
-                if ((typeof offset === "number" && typeof limit === "number") ||
-                    (typeof limit === "number" && !offset) ||
-                    (typeof offset === "number" && !limit) ||
-                    (!offset && !limit)) {
-                    resp = this.renderers.slice(offset, limit);
-                }
-                return [2 /*return*/, { status: "ok", data: resp }];
-            });
-        });
-    };
     Renderers.prototype.updateElement = function (elementId, difference) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 if (difference.hasOwnProperty("state")) {
                     switch (difference.state) {
                         case "play":
-                            switch (this.nR.id) {
+                            switch (this.netfluxRenderer.id) {
                                 // mock player requested
-                                case this.nR.id:
-                                    this.nR.play();
+                                case this.netfluxRenderer.id:
+                                    this.netfluxRenderer.play();
                                     break;
                                 default:
                                     return [2 /*return*/, { status: "error", error: new Error("Renderer not found"), code: 404 }];
                             }
                             break;
                         default:
-                            switch (this.nR.id) {
+                            switch (this.netfluxRenderer.id) {
                                 // mock player requested
-                                case this.nR.id:
-                                    this.nR.stop();
+                                case this.netfluxRenderer.id:
+                                    this.netfluxRenderer.stop();
                                     break;
                                 default:
                                     return [2 /*return*/, { status: "error", error: new Error("Renderer not found"), code: 404 }];
@@ -134,12 +93,12 @@ var Renderers = /** @class */ (function (_super) {
                 }
                 if (difference.hasOwnProperty("shuffle")) {
                     if (-1 !== ["off", "on"].indexOf(difference.shuffle)) {
-                        this.nR.setShuffle(difference.shuffle);
+                        this.netfluxRenderer.setShuffle(difference.shuffle);
                     }
                 }
                 if (difference.hasOwnProperty("repeat")) {
                     if (-1 !== ["off", "repeatone", "repeatall"].indexOf(difference.repeat)) {
-                        this.nR.setShuffle(difference.repeat);
+                        this.netfluxRenderer.setShuffle(difference.repeat);
                     }
                 }
                 if (difference.hasOwnProperty("currentMediaItem")) {
@@ -151,7 +110,7 @@ var Renderers = /** @class */ (function (_super) {
                         return [2 /*return*/, { status: "error", error: new Error("currentMediaItem not found"), code: 500 }];
                     }
                 }
-                this.nR.next();
+                this.netfluxRenderer.next();
                 return [2 /*return*/, { status: "ok" }];
             });
         });

@@ -21,7 +21,6 @@ interface ICollectionElement extends IElement {
 }
 
 export class Collections extends Resource {
-  private collections: Array<BehaviorSubject<ICollectionElement>> = [];
   private medialibrary: Medialibrary;
   private tracks: Tracks;
   private logger = RsiLogger.getInstance().getLogger("media.Collections");
@@ -45,7 +44,7 @@ export class Collections extends Resource {
       lastUpdate: Date.now(),
       propertiesChanged: []
     });
-    this.collections.push(initialCollection);
+    this.addElement(initialCollection);
     this._change = new BehaviorSubject({ lastUpdate: Date.now(), action: "init" } as IResourceUpdate);
     this.medialibrary = new Medialibrary();
     this.tracks = this.medialibrary.getResource("Tracks") as Tracks;
@@ -61,16 +60,6 @@ export class Collections extends Resource {
 
   get resourceSubscribable(): boolean {
     return true;
-  }
-
-  public async getElement(elementId: string): Promise<ElementResponse> {
-    // find the element requested by the client
-    return {
-      data: this.collections.find((element: BehaviorSubject<ICollectionElement>) => {
-        return (element.getValue().data as { id: string }).id === elementId;
-      }),
-      status: "ok"
-    };
   }
 
   public async createElement(state: any): Promise<ElementResponse> {
@@ -111,7 +100,7 @@ export class Collections extends Resource {
       lastUpdate: Date.now(),
       propertiesChanged: []
     });
-    this.collections.push(newCollection);
+    this.addElement(newCollection);
 
     /** publish a resource change */
     this._change.next({ lastUpdate: Date.now(), action: "add" });
@@ -140,39 +129,10 @@ export class Collections extends Resource {
   }
 
   public async deleteElement(elementId: string): Promise<ElementResponse> {
-    const idx = this.collections.findIndex(
-      (element: BehaviorSubject<ICollectionElement>, index: number) => {
-        return (element.getValue().data as { id: string }).id === elementId;
-      }
-    );
-    if (-1 !== idx) {
-      this.collections.splice(idx, 1); // remove one item from the collections array
+    if (this.removeElement(elementId)) {
       return { status: "ok" };
     }
     return { status: "error", code: 404, message: "Element can not be found" };
-  }
-
-  public async getResource(
-    offset?: string | number,
-    limit?: string | number
-  ): Promise<CollectionResponse> {
-    // retriev all element
-    let resp: Array<BehaviorSubject<ICollectionElement>>;
-
-    if (
-      (typeof offset === "number" && typeof limit === "number") ||
-      (typeof limit === "number" && !offset) ||
-      (typeof offset === "number" && !limit) ||
-      (!offset && !limit)
-    ) {
-      resp = this.collections.slice(offset as number, limit as number);
-    }
-
-    return { status: "ok", data: resp };
-  }
-
-  get elements(): Array<BehaviorSubject<IElement>> {
-    return this.collections;
   }
 
   private async _setItems(itemuris: string[]): Promise<ItemObject[] | ElementResponse> {

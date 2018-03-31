@@ -18,7 +18,6 @@ interface ITracksElement extends IElement {
 }
 
 export class Tracks extends Resource {
-  private tracks: Array<BehaviorSubject<ITracksElement>> = [];
 
   // private _logger = RsiLogger.getInstance().getLogger("media");
 
@@ -46,7 +45,7 @@ export class Tracks extends Resource {
           lastUpdate: Date.now(),
           propertiesChanged: []
         });
-        this.tracks.push(trackObject);
+        this.addElement(trackObject);
       }
     }
 
@@ -57,36 +56,4 @@ export class Tracks extends Resource {
     return true;
   }
 
-  get elements(): Array<BehaviorSubject<IElement>> {
-    return this.tracks;
-  }
-
-  public async getElement(elementId: string): Promise<ElementResponse> {
-    // find the element requested by the client
-    return {
-      data: this.tracks.find((element: BehaviorSubject<ITracksElement>) => {
-        return (element.getValue().data as { id: string }).id === elementId;
-      }),
-      status: "ok"
-    };
-  }
-
-  public async getResource(
-    offset?: string | number,
-    limit?: string | number
-  ): Promise<CollectionResponse> {
-    // retriev all element
-    let resp: Array<BehaviorSubject<ITracksElement>>;
-
-    if (
-      (typeof offset === "number" && typeof limit === "number") ||
-      (typeof limit === "number" && !offset) ||
-      (typeof offset === "number" && !limit) ||
-      (!offset && !limit)
-    ) {
-      resp = this.tracks.slice(offset as number, limit as number);
-    }
-
-    return { status: "ok", data: resp };
-  }
 }
