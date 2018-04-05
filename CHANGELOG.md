@@ -1,5 +1,5 @@
-<a name="0.2.4"></a>
-## [0.2.4](https://github.com/wzr1337/rsi-plugins.media/compare/0.2.3...v0.2.4) (2018-03-31)
+<a name="0.2.5"></a>
+## [0.2.5](https://github.com/wzr1337/rsi-plugins.media/compare/0.2.4...v0.2.5) (2018-04-05)
 
 
 ### Bug Fixes

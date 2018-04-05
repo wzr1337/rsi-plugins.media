@@ -46,7 +46,7 @@ export class Collections extends Resource {
     });
     this.addElement(initialCollection);
     this._change = new BehaviorSubject({ lastUpdate: Date.now(), action: "init" } as IResourceUpdate);
-    this.medialibrary = new Medialibrary();
+    this.medialibrary = new Medialibrary(); /// This leads to multiple medialibrary instances !!!!
     this.tracks = this.medialibrary.getResource("Tracks") as Tracks;
   }
 
