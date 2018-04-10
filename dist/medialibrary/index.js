@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@rsi/core");
-var media_1 = require("./media");
+var media_1 = require("../media");
 exports.Media = media_1.Media;
 var tracks_1 = require("./tracks");
 exports.Tracks = tracks_1.Tracks;
@@ -26,4 +26,4 @@ var Medialibrary = /** @class */ (function (_super) {
     return Medialibrary;
 }(core_1.Service));
 exports.Medialibrary = Medialibrary;
-//# sourceMappingURL=medialibrary.js.map
+//# sourceMappingURL=index.js.map

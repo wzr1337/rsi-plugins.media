@@ -12,9 +12,8 @@ import {
   StatusCode
 } from "@rsi/core";
 
-import { ItemObject } from "./media.types";
-import { ICollectionObject } from "./media.types";
-import { Medialibrary, Tracks } from "./medialibrary";
+import { Medialibrary, Tracks } from "../medialibrary";
+import { ICollectionObject, ItemObject } from "./schema";
 
 interface ICollectionElement extends IElement {
   data: ICollectionObject;

@@ -5,7 +5,7 @@ import * as uuid from "uuid";
 import { Cdn } from "@rsi/cdn";
 import { RsiLogger, Service } from "@rsi/core";
 
-import { Media } from "./media";
+import { Media } from "../media";
 import { Tracks } from "./tracks";
 
 class Medialibrary extends Service {

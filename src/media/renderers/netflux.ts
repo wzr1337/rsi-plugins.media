@@ -1,6 +1,6 @@
 import { IRsiLoggerInstance, RsiLogger } from "@rsi/core";
 import { BehaviorSubject } from "rxjs";
-import { ICollectionObject, IRendererElement, IRendererObject } from "../media.types";
+import { ICollectionObject, IRendererElement, IRendererObject } from "../schema";
 
 export class NetfluxRenderer extends BehaviorSubject<IRendererElement> {
   private interval: NodeJS.Timer;

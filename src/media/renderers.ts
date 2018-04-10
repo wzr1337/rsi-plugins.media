@@ -10,8 +10,8 @@ import {
   Service,
 } from "@rsi/core";
 
-import { ICollectionObject, IRendererElement, IRendererObject } from "./media.types";
 import { NetfluxRenderer } from "./renderers/netflux";
+import { ICollectionObject, IRendererElement, IRendererObject } from "./schema";
 
 export class Renderers extends Resource {
   private netfluxRenderer: NetfluxRenderer;

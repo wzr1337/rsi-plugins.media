@@ -28,4 +28,4 @@ var Media = /** @class */ (function (_super) {
     return Media;
 }(core_1.Service));
 exports.Media = Media;
-//# sourceMappingURL=media.js.map
+//# sourceMappingURL=index.js.map

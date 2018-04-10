@@ -48,7 +48,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var rxjs_1 = require("rxjs");
 var uuid_1 = require("uuid");
 var core_1 = require("@rsi/core");
-var medialibrary_1 = require("./medialibrary");
+var medialibrary_1 = require("../medialibrary");
 var Collections = /** @class */ (function (_super) {
     __extends(Collections, _super);
     function Collections(service) {

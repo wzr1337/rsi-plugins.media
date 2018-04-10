@@ -1,5 +1,5 @@
 import { BehaviorSubject } from "rxjs";
-import { ICollectionObject, IRendererElement } from "../media.types";
+import { ICollectionObject, IRendererElement } from "../schema";
 export declare class NetfluxRenderer extends BehaviorSubject<IRendererElement> {
     private service;
     private resource;

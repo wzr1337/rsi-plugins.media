@@ -1,5 +1,5 @@
 import { ElementResponse, Resource, Service } from "@rsi/core";
-import { ICollectionObject } from "./media.types";
+import { ICollectionObject } from "./schema";
 export declare class Renderers extends Resource {
     private mediaCollection;
     private netfluxRenderer;
