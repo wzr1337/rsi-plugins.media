@@ -2,7 +2,7 @@ import { Service } from "@rsi/core";
 import { Media } from "./media";
 import { Medialibrary } from "./medialibrary";
 
-const getPlugins = (): Array<new () => Service> => {
+const getPlugins = (): Array<typeof Service> => {
   return [ Medialibrary, Media ];
 };
 
