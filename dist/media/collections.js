@@ -72,7 +72,7 @@ var Collections = /** @class */ (function (_super) {
         });
         _this.addElement(initialCollection);
         _this._change = new rxjs_1.BehaviorSubject({ lastUpdate: Date.now(), action: "init" });
-        _this.medialibrary = new medialibrary_1.Medialibrary(); /// This leads to multiple medialibrary instances !!!!
+        _this.medialibrary = medialibrary_1.Medialibrary.getInstance();
         _this.tracks = _this.medialibrary.getResource("Tracks");
         return _this;
     }

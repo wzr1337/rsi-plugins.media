@@ -6,7 +6,7 @@ import { Renderers } from "./renderers";
 export class Media extends Service {
   public readonly id = "f9a1073f-e90c-4c56-8368-f4c6bd1d8c96"; // random id
 
-  constructor() {
+  protected constructor() {
     super();
     const collections = new Collections(this);
     this.resources.push(collections);
