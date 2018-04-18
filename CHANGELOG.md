@@ -1,5 +1,17 @@
+<a name="0.2.6"></a>
+## [0.2.6](https://github.com/wzr1337/rsi-plugins.media/compare/0.2.5...v0.2.6) (2018-04-18)
+
+
+### Bug Fixes
+
+* **medialibrary.tracks:** mocks location ([8f45c4b](https://github.com/wzr1337/rsi-plugins.media/commit/8f45c4b))
+* **package:** use singleton feature branch ([c3cd0e6](https://github.com/wzr1337/rsi-plugins.media/commit/c3cd0e6))
+* **singleton:** adjust plugin gathering ([92a81fa](https://github.com/wzr1337/rsi-plugins.media/commit/92a81fa))
+
+
+
 <a name="0.2.5"></a>
-## [0.2.5](https://github.com/wzr1337/rsi-plugins.media/compare/0.2.4...v0.2.5) (2018-04-05)
+## [0.2.5](https://github.com/wzr1337/rsi-plugins.media/compare/0.2.4...0.2.5) (2018-04-05)
 
 
 ### Bug Fixes

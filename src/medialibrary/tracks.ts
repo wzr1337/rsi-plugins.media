@@ -23,7 +23,7 @@ export class Tracks extends Resource {
 
   constructor(service: Service) {
     super(service);
-    const mocksPath = path.join(__dirname, "..", "data", "mocks.json");
+    const mocksPath = path.join(__dirname, "..", "..", "data", "mocks.json");
 
     const mocks = JSON.parse(fs.readFileSync(mocksPath).toString());
     for (const idx in mocks.tracks) {
