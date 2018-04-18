@@ -24,7 +24,7 @@
   "homepage": "https://github.com/wzr1337/rsi-plugins.media#readme",
   "dependencies": {
     "@rsi/cdn": "https://github.com/wzr1337/rsi.cdn#0.2.6",
-    "@rsi/core": "https://github.com/wzr1337/rsi.core#feature/singleton-service",
+    "@rsi/core": "https://github.com/wzr1337/rsi.core#0.2.7",
     "@types/winston": "^2.3.8",
     "rxjs": "^5.5.6",
     "uuid": "^3.2.1"
