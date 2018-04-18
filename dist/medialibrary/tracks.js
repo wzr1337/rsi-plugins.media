@@ -19,7 +19,7 @@ var Tracks = /** @class */ (function (_super) {
     // private _logger = RsiLogger.getInstance().getLogger("media");
     function Tracks(service) {
         var _this = _super.call(this, service) || this;
-        var mocksPath = path.join(__dirname, "..", "data", "mocks.json");
+        var mocksPath = path.join(__dirname, "..", "..", "data", "mocks.json");
         var mocks = JSON.parse(fs.readFileSync(mocksPath).toString());
         for (var idx in mocks.tracks) {
             if (mocks.tracks.hasOwnProperty(idx)) {

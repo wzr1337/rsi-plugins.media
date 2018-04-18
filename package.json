@@ -1,6 +1,6 @@
 {
   "name": "@rsi-plugins/media",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "media and medialibrary plugin",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
