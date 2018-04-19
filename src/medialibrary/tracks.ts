@@ -32,8 +32,9 @@ export class Tracks extends Resource {
       if (mocks.tracks.hasOwnProperty(idx)) {
         const track = mocks.tracks[idx];
 
-        Cdn.getInstance().register("images", path.basename(track.image), (): Buffer => {
-          return fs.readFileSync(path.join(dataPath, track.image));
+        track.image = Cdn.getInstance().register("images", path.basename(track.image),
+            (resourceName: string, fileName: string): Buffer => {
+          return fs.readFileSync(path.join(dataPath, fileName));
         });
 
         const trackObject = new BehaviorSubject<ITracksElement>({

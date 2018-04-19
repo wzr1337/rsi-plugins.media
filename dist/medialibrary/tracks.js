@@ -22,30 +22,26 @@ var Tracks = /** @class */ (function (_super) {
         _this.logger = core_1.RsiLogger.getInstance().getLogger("medialibrary.Tracks");
         var dataPath = path.join(__dirname, "..", "..", "data");
         var mocks = JSON.parse(fs.readFileSync(path.join(dataPath, "mocks.json")).toString());
-        var _loop_1 = function (idx) {
+        for (var idx in mocks.tracks) {
             if (mocks.tracks.hasOwnProperty(idx)) {
-                var track_1 = mocks.tracks[idx];
-                cdn_1.Cdn.getInstance().register("images", path.basename(track_1.image), function () {
-                    return fs.readFileSync(path.join(dataPath, track_1.image));
+                var track = mocks.tracks[idx];
+                track.image = cdn_1.Cdn.getInstance().register("images", path.basename(track.image), function (resourceName, fileName) {
+                    return fs.readFileSync(path.join(dataPath, fileName));
                 });
                 var trackObject = new rxjs_1.BehaviorSubject({
                     data: Object.assign({
                         uri: "/" +
-                            this_1.service.name +
+                            _this.service.name +
                             "/" +
-                            this_1.name +
+                            _this.name +
                             "/" +
-                            track_1.id
-                    }, track_1),
+                            track.id
+                    }, track),
                     lastUpdate: Date.now(),
                     propertiesChanged: []
                 });
-                this_1.addElement(trackObject);
+                _this.addElement(trackObject);
             }
-        };
-        var this_1 = this;
-        for (var idx in mocks.tracks) {
-            _loop_1(idx);
         }
         _this._change = new rxjs_1.BehaviorSubject({ lastUpdate: Date.now(), action: "init" });
         return _this;

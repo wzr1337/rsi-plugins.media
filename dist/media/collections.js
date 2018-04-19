@@ -57,7 +57,7 @@ var Collections = /** @class */ (function (_super) {
         var collectionId = "deadbeef-d2c1-11e6-9376-df943f51f0d8";
         _this.medialibrary = medialibrary_1.Medialibrary.getInstance();
         _this.tracks = _this.medialibrary.getResource("tracks");
-        var items = _this.tracks.elements[0] ? _this.tracks.elements[0].getValue().data : [];
+        var items = _this.tracks.elements[0] ? [_this.tracks.elements[0].getValue().data] : [];
         var initialCollection = new rxjs_1.BehaviorSubject({
             data: {
                 id: collectionId,
