@@ -7,10 +7,12 @@ import {
   IElement,
   IResourceUpdate,
   Resource,
+  RsiLogger,
   Service,
 } from "@rsi/core";
 import { BehaviorSubject, Subject } from "rxjs";
 
+import { Cdn } from "@rsi/cdn";
 import { ITrackObject } from "./schema";
 
 interface ITracksElement extends IElement {
@@ -19,16 +21,21 @@ interface ITracksElement extends IElement {
 
 export class Tracks extends Resource {
 
-  // private _logger = RsiLogger.getInstance().getLogger("media");
+  private logger = RsiLogger.getInstance().getLogger("medialibrary.Tracks");
 
   constructor(service: Service) {
     super(service);
-    const mocksPath = path.join(__dirname, "..", "..", "data", "mocks.json");
+    const dataPath = path.join(__dirname, "..", "..", "data");
 
-    const mocks = JSON.parse(fs.readFileSync(mocksPath).toString());
+    const mocks = JSON.parse(fs.readFileSync(path.join(dataPath, "mocks.json")).toString());
     for (const idx in mocks.tracks) {
       if (mocks.tracks.hasOwnProperty(idx)) {
         const track = mocks.tracks[idx];
+
+        Cdn.getInstance().register("images", path.basename(track.image), (): Buffer => {
+          return fs.readFileSync(path.join(dataPath, track.image));
+        });
+
         const trackObject = new BehaviorSubject<ITracksElement>({
           data: Object.assign(
             {

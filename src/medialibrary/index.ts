@@ -3,7 +3,7 @@ import * as path from "path";
 import * as uuid from "uuid";
 
 import { Cdn } from "@rsi/cdn";
-import { RsiLogger, Service } from "@rsi/core";
+import { Resource, RsiLogger, Service } from "@rsi/core";
 
 import { Media } from "../media";
 import { Tracks } from "./tracks";
