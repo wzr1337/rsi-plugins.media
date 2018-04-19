@@ -29,7 +29,9 @@ export class Collections extends Resource {
     const collectionId = "deadbeef-d2c1-11e6-9376-df943f51f0d8";
     this.medialibrary = Medialibrary.getInstance();
     this.tracks = this.medialibrary.getResource("tracks") as Tracks;
-    const items = this.tracks.elements[0] ? [this.tracks.elements[0].getValue().data] : [];
+    const items = this.tracks.elements[0] ? this.tracks.elements.slice(0, 5).map((track) => {
+      return track.getValue().data;
+    }) : [];
     const initialCollection = new BehaviorSubject<ICollectionElement>({
       data: {
         id: collectionId,
