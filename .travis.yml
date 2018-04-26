@@ -1,0 +1,30 @@
+# use the latest ubuntu distro
+dist: trusty
+# require sudo
+sudo: required
+
+# this is a node project
+language: node_js
+node_js:
+- '8'
+
+compiler:
+  - gcc
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-6
+      - g++-6
+      - cmake
+
+git:
+  submodules: false
+
+before_install:
+
+install:
+  - npm install
+script:
+  - npm run test
