@@ -1,5 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-describe("Service", function () {
+describe("Renderers", function () {
 });
-//# sourceMappingURL=index.spec.js.map
+//# sourceMappingURL=renderers.spec.js.map
