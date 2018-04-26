@@ -1,11 +1,4 @@
-import * as fs from "fs";
-import * as path from "path";
-import * as uuid from "uuid";
-
-import { Cdn } from "@rsi/cdn";
-import { Resource, RsiLogger, Service } from "@rsi/core";
-
-import { Media } from "../media";
+import { Service } from "@rsi/core";
 import { Tracks } from "./tracks";
 
 class Medialibrary extends Service {
@@ -17,4 +10,4 @@ class Medialibrary extends Service {
   }
 }
 
-export { Medialibrary, Media, Tracks };
+export { Medialibrary, Tracks };
