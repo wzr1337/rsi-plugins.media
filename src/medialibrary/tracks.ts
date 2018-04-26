@@ -1,18 +1,8 @@
+import { Cdn } from "@rsi/cdn";
+import { IElement, IResourceUpdate, Resource, RsiLogger, Service } from "@rsi/core";
 import * as fs from "fs";
 import * as path from "path";
-
-import {
-  CollectionResponse,
-  ElementResponse,
-  IElement,
-  IResourceUpdate,
-  Resource,
-  RsiLogger,
-  Service,
-} from "@rsi/core";
-import { BehaviorSubject, Subject } from "rxjs";
-
-import { Cdn } from "@rsi/cdn";
+import { BehaviorSubject } from "rxjs";
 import { ITrackObject } from "./schema";
 
 interface ITracksElement extends IElement {

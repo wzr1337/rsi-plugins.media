@@ -10,11 +10,11 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+var cdn_1 = require("@rsi/cdn");
+var core_1 = require("@rsi/core");
 var fs = require("fs");
 var path = require("path");
-var core_1 = require("@rsi/core");
 var rxjs_1 = require("rxjs");
-var cdn_1 = require("@rsi/cdn");
 var Tracks = /** @class */ (function (_super) {
     __extends(Tracks, _super);
     function Tracks(service) {
