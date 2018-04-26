@@ -1,6 +1,8 @@
 # RSI Plugin
 This Software is designed to work as a plugin for the so called `rsiServer` (https://github.com/wzr1337/rsiServer).
 
+![](https://travis-ci.org/wzr1337/rsi-plugins.media.svg?branch=master)
+
 ## Contribution
 I welcome everyone to contribute to this repo. Let us build awesome software - together. In order to streamline contribution to this repo, some guidelines are described below.
 
