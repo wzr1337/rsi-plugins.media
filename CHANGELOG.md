@@ -1,5 +1,10 @@
+<a name="0.2.8"></a>
+## [0.2.8](https://github.com/wzr1337/rsi-plugins.media/compare/v0.2.7...v0.2.8) (2018-06-15)
+
+
+
 <a name="0.2.7"></a>
-## [0.2.7](https://github.com/wzr1337/rsi-plugins.media/compare/0.2.6...0.2.7) (2018-06-15)
+## [0.2.7](https://github.com/wzr1337/rsi-plugins.media/compare/0.2.6...v0.2.7) (2018-06-15)
 
 
 ### Bug Fixes
