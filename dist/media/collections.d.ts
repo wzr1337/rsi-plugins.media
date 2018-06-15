@@ -10,5 +10,5 @@ export declare class Collections extends Resource {
     createElement(state: any): Promise<ElementResponse>;
     updateElement(elementId: string, difference: any): Promise<ElementResponse>;
     deleteElement(elementId: string): Promise<ElementResponse>;
-    private _setItems(itemuris);
+    private _setItems;
 }

@@ -5,12 +5,14 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "npm run build:dev && jasmine --config=./jasmine.json",
+    "test": "npm run build:dev && npm run test:only",
+    "test:only": "jasmine --config=./jasmine.json",
     "build": "npm run build:dev",
     "build:dev": "tsc",
-    "build:prod": "npm run lint && tsc",
+    "build:prod": "npm run lint && tsc && npm run test:only",
     "lint": "tslint --project ./tsconfig.json",
-    "lint:fix": "tslint --fix --project ./tsconfig.json"
+    "lint:fix": "tslint --fix --project ./tsconfig.json",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md"
   },
   "repository": {
     "type": "git",
@@ -23,18 +25,19 @@
   },
   "homepage": "https://github.com/wzr1337/rsi-plugins.media#readme",
   "dependencies": {
-    "@rsi/cdn": "https://github.com/wzr1337/rsi.cdn#0.2.8",
-    "@rsi/core": "https://github.com/wzr1337/rsi.core#0.2.7",
+    "@rsi/cdn": "https://github.com/wzr1337/rsi.cdn#0.2.9",
+    "@rsi/core": "https://github.com/wzr1337/rsi.core#0.2.9",
     "@types/winston": "^2.3.8",
-    "rxjs": "^5.5.6",
+    "rxjs": "^5.5.11",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.6",
     "@types/node": "^9.4.0",
     "@types/uuid": "^3.4.3",
+    "conventional-changelog-cli": "^2.0.1",
     "jasmine": "^3.1.0",
-    "tslint": "^5.9.1",
-    "typescript": "^2.7.1"
+    "tslint": "^5.10.0",
+    "typescript": "^2.9.1"
   }
 }
