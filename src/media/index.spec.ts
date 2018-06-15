@@ -6,7 +6,7 @@ beforeAll(() => {
 });
 
 describe("Media", () => { // empty
-  xit ("should have an id", () => {
+  it ("should have an id", () => {
     const media = Media.getInstance();
     expect(media.id).toBeDefined();
   });

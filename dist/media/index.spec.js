@@ -6,7 +6,7 @@ beforeAll(function () {
     core_1.RsiLogger.getInstance().getLogger("cdn").level = "error"; // disbale cdn silly logs
 });
 describe("Media", function () {
-    xit("should have an id", function () {
+    it("should have an id", function () {
         var media = _1.Media.getInstance();
         expect(media.id).toBeDefined();
     });

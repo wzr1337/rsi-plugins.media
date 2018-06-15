@@ -56,7 +56,7 @@ var Collections = /** @class */ (function (_super) {
         _this.logger = core_1.RsiLogger.getInstance().getLogger("media.Collections");
         var collectionId = "deadbeef-d2c1-11e6-9376-df943f51f0d8";
         _this.medialibrary = medialibrary_1.Medialibrary.getInstance();
-        _this.tracks = _this.medialibrary.getResource("tracks");
+        _this.tracks = _this.medialibrary.getResource("Tracks");
         if (!_this.tracks) {
             throw new Error("Cannot load tracks from medialibrary. Did you add at least one?");
         }
