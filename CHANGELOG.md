@@ -1,3 +1,13 @@
+<a name="0.2.8"></a>
+## [0.2.8](https://github.com/wzr1337/rsi-plugins.media/compare/0.2.7...0.2.8) (2018-06-15)
+
+
+### Bug Fixes
+
+* **collections:** Tracks lookup must be correctly cased ([31ae2a5](https://github.com/wzr1337/rsi-plugins.media/commit/31ae2a5))
+
+
+
 <a name="0.2.7"></a>
 ## [0.2.7](https://github.com/wzr1337/rsi-plugins.media/compare/0.2.6...0.2.7) (2018-06-15)
 
